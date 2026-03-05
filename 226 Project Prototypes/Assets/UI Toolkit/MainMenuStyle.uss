@@ -1,0 +1,19 @@
+.header {
+    font-size: 100px;
+    color: rgb(255, 255, 255);
+    align-self: center;
+    margin-top: 40px;
+}
+
+.button {
+    font-size: 55px;
+    width: 400px;
+    height: 120px;
+    align-self: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-image: none;
+    margin-top: 70px;
+}
