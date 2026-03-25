@@ -266,7 +266,7 @@ public class MainMenu : MonoBehaviour
         }
 
         // Load the game scene
-        SceneManager.LoadScene("MainGame");
+        SceneManager.LoadScene("Level01"); // TEMPORARY!!!!!!!!! CHANGE LATER
     }
 
 	// Method for Options button

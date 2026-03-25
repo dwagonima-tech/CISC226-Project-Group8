@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 1614176}
   - component: {fileID: 1614175}
   - component: {fileID: 1614177}
+  - component: {fileID: 1614178}
   m_Layer: 5
   m_Name: Slot 2
   m_TagString: Untagged
@@ -240,6 +241,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1614178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 1, g: 1, b: 1, a: 1}
+  m_color2: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &109164069
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,6 +680,7 @@ GameObject:
   - component: {fileID: 350809395}
   - component: {fileID: 350809394}
   - component: {fileID: 350809393}
+  - component: {fileID: 350809396}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -784,6 +802,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 350809391}
   m_CullTransparentMesh: 1
+--- !u!114 &350809396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 350809391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 1}
+  m_color2: {r: 0.3019608, g: 0.3019608, b: 0.3019608, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &363532184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1011,6 +1045,7 @@ GameObject:
   - component: {fileID: 535911165}
   - component: {fileID: 535911164}
   - component: {fileID: 535911166}
+  - component: {fileID: 535911167}
   m_Layer: 5
   m_Name: LoadGame
   m_TagString: Untagged
@@ -1120,6 +1155,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &535911167
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535911162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_color2: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+  m_angle: 0.324
+  m_ignoreRatio: 1
 --- !u!1 &541410348
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,6 +1183,7 @@ GameObject:
   - component: {fileID: 541410352}
   - component: {fileID: 541410351}
   - component: {fileID: 541410350}
+  - component: {fileID: 541410353}
   m_Layer: 5
   m_Name: OptionsButton
   m_TagString: Untagged
@@ -1253,6 +1305,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 541410348}
   m_CullTransparentMesh: 1
+--- !u!114 &541410353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 541410348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_color2: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+  m_angle: 0.324
+  m_ignoreRatio: 1
 --- !u!1 &542920285
 GameObject:
   m_ObjectHideFlags: 0
@@ -1265,6 +1333,7 @@ GameObject:
   - component: {fileID: 542920288}
   - component: {fileID: 542920287}
   - component: {fileID: 542920289}
+  - component: {fileID: 542920290}
   m_Layer: 5
   m_Name: Slot 1
   m_TagString: Untagged
@@ -1374,6 +1443,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &542920290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542920285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 1, g: 1, b: 1, a: 1}
+  m_color2: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &555296839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1386,6 +1471,7 @@ GameObject:
   - component: {fileID: 555296842}
   - component: {fileID: 555296841}
   - component: {fileID: 555296843}
+  - component: {fileID: 555296844}
   m_Layer: 5
   m_Name: NewGame
   m_TagString: Untagged
@@ -1495,6 +1581,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &555296844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555296839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.018998126, g: 0.7830189, b: 0, a: 1}
+  m_color2: {r: 0.005606967, g: 0.3962264, b: 0.104955226, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &644733531
 GameObject:
   m_ObjectHideFlags: 0
@@ -2212,6 +2314,7 @@ GameObject:
   - component: {fileID: 1255781703}
   - component: {fileID: 1255781702}
   - component: {fileID: 1255781704}
+  - component: {fileID: 1255781705}
   m_Layer: 5
   m_Name: BackButton
   m_TagString: Untagged
@@ -2321,6 +2424,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1255781705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255781700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.6415094, g: 0.6415094, b: 0.6415094, a: 1}
+  m_color2: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
+  m_angle: 0.324
+  m_ignoreRatio: 1
 --- !u!1 &1509639106
 GameObject:
   m_ObjectHideFlags: 0
@@ -2333,6 +2452,7 @@ GameObject:
   - component: {fileID: 1509639110}
   - component: {fileID: 1509639109}
   - component: {fileID: 1509639108}
+  - component: {fileID: 1509639111}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -2429,7 +2549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.23244968, g: 0.8867924, b: 0.2300641, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2454,6 +2574,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509639106}
   m_CullTransparentMesh: 1
+--- !u!114 &1509639111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509639106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 0.018998126, g: 0.7830189, b: 0, a: 1}
+  m_color2: {r: 0.005606967, g: 0.3962264, b: 0.104955226, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &1683999534
 GameObject:
   m_ObjectHideFlags: 0
@@ -2489,7 +2625,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 200}
-  m_SizeDelta: {x: 1600, y: 100}
+  m_SizeDelta: {x: 1920, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1683999536
 MonoBehaviour:
@@ -2511,10 +2647,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'PIZZAPOCALYPSE: AIM TRAINER'
+  m_text: "PIZZAPOCALYPSE: \nAIM TRAINER"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b52e3a21127f2c04f9339de625601386, type: 2}
+  m_sharedMaterial: {fileID: -4164489805304396054, guid: b52e3a21127f2c04f9339de625601386, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2522,13 +2658,13 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
+  m_enableVertexGradient: 1
   m_colorMode: 3
   m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+    topLeft: {r: 0.31484336, g: 0.06274509, b: 0.62352943, a: 1}
+    topRight: {r: 0.745283, g: 0.3627125, b: 0.13007298, a: 1}
+    bottomLeft: {r: 0.1260235, g: 0.4528302, b: 0.16657872, a: 1}
+    bottomRight: {r: 0.1254902, g: 0.4509804, b: 0.16470589, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
@@ -2538,8 +2674,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2848,6 +2984,7 @@ GameObject:
   - component: {fileID: 1841713668}
   - component: {fileID: 1841713667}
   - component: {fileID: 1841713669}
+  - component: {fileID: 1841713670}
   m_Layer: 5
   m_Name: Slot 3
   m_TagString: Untagged
@@ -2957,6 +3094,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1841713670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841713665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aca4e0e7015b7ed4eb345464ccf1a533, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIGradient
+  m_color1: {r: 1, g: 1, b: 1, a: 1}
+  m_color2: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
+  m_angle: 0
+  m_ignoreRatio: 1
 --- !u!1 &1857132461
 GameObject:
   m_ObjectHideFlags: 0
@@ -3007,7 +3160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.007843138}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
