@@ -9,7 +9,8 @@ public class TrackingMinigame : MonoBehaviour
 	public GameObject endCirclePrefab;
 	public GameObject trackingCirclePrefab;
 
-	[Header("Path Settings")]
+
+    [Header("Path Settings")]
 	public float pathLength = 12f;
 	public float curveHeight = 4f;
 	public int curveSegments = 3;

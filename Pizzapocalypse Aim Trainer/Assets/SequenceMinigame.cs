@@ -7,7 +7,8 @@ public class SequenceMinigame : MonoBehaviour
 {
 	public GameObject circlePrefab;
 	public int numberOfCircles = 5;
-	public float delayBetweenRounds = 0.5f;
+    public float CircleSize = 1f;
+    public float delayBetweenRounds = 0.5f;
 	public float timeLimit = 30f;
 
 	private GameManager gameManager;
@@ -55,10 +56,10 @@ public class SequenceMinigame : MonoBehaviour
 		);
 
 		GameObject circle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
-		circle.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+        circle.transform.localScale = new Vector3(CircleSize, CircleSize, CircleSize);
 
-		// CRITICAL: Add collider
-		CircleCollider2D collider = circle.GetComponent<CircleCollider2D>();
+        // CRITICAL: Add collider
+        CircleCollider2D collider = circle.GetComponent<CircleCollider2D>();
 		if (collider == null)
 			circle.AddComponent<CircleCollider2D>();
 

@@ -7,6 +7,7 @@ public class ClickMinigame : MonoBehaviour
 	public GameObject circlePrefab;
 	public int totalCirclesToSpawn = 10;
 	public float timeLimit = 30f;
+	public float CircleSize = 1f;
 
 	private GameManager gameManager;
 	private int circlesClicked = 0;
@@ -14,7 +15,6 @@ public class ClickMinigame : MonoBehaviour
 	private bool isActive = false;
 	private GameObject currentCircle;
 
-	// Fixed spawn area that works
 	public float spawnMinX = -6f;
 	public float spawnMaxX = 6f;
 	public float spawnMinY = -3f;
@@ -48,6 +48,7 @@ public class ClickMinigame : MonoBehaviour
 		);
 
 		currentCircle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
+		currentCircle.transform.localScale = new Vector3(CircleSize, CircleSize, CircleSize);
 
 		// ABSOLUTELY CRITICAL: Ensure circle has a collider
 		CircleCollider2D collider = currentCircle.GetComponent<CircleCollider2D>();
@@ -57,7 +58,7 @@ public class ClickMinigame : MonoBehaviour
 		// Make sure it's visible
 		SpriteRenderer renderer = currentCircle.GetComponent<SpriteRenderer>();
 		if (renderer != null)
-			renderer.color = Color.white;
+			renderer.color = Color.green;
 
 		// Add click handler
 		ClickCircleHandler handler = currentCircle.AddComponent<ClickCircleHandler>();
