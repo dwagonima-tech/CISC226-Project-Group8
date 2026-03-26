@@ -3191,7 +3191,7 @@ MonoBehaviour:
   playerBaseDamage: 10
   enemyMaxHP: 100
   enemyCurrentHP: 0
-  enemyBaseDamage: 2
+  enemyBaseDamage: 25
   playerHealthBar: {fileID: 244012282}
   enemyHealthBar: {fileID: 1983214838}
   playerHealthText: {fileID: 1454075818}

@@ -96,7 +96,6 @@ public class GameManager : MonoBehaviour
 		if (!isPlayerTurn || isMinigameActive) return;
 
 		currentAction = "defend";
-        animator.SetTrigger("DefendTrigger");
 
         StartRandomMinigame();
 	}
@@ -158,7 +157,6 @@ public class GameManager : MonoBehaviour
 
 		}
 
-		animator.SetTrigger("BackToIdle");
 		isMinigameActive = false;
 	}
 
@@ -167,7 +165,8 @@ public class GameManager : MonoBehaviour
 		int damageDealt = Mathf.RoundToInt(playerBaseDamage * multiplier);
 		enemyCurrentHP -= damageDealt;
 
-		messageText.text = $"You dealt {damageDealt} damage! (x{multiplier:F1})";
+
+        messageText.text = $"You dealt {damageDealt} damage! (x{multiplier:F1})";
 
 		UpdateUI();
 
@@ -178,7 +177,8 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		Invoke("EnemyTurn", 1.5f);
+
+        Invoke("EnemyTurn", 1.5f);
 	}
 
 	void ProcessDefend(float multiplier)
@@ -186,12 +186,15 @@ public class GameManager : MonoBehaviour
 		
 		if (defenseTurnsRemaining == 0)
 		{
+
             messageText.text = $"Defense up! Reducing damage to {damageReduction * 100}% for {Mathf.RoundToInt(multiplier)} turns.";
         }
 		else
+
 			messageText.text = $"Defense up! Reducing damage to {damageReduction * 100}% for an additional {Mathf.RoundToInt(multiplier)} turns.";
 
         defenseTurnsRemaining += Mathf.RoundToInt(multiplier);
+		
 
         Invoke("EnemyTurn", 1.5f);
 	}
@@ -228,17 +231,20 @@ public class GameManager : MonoBehaviour
 		if (playerCurrentHP <= 0)
 		{
 			playerCurrentHP = 0;
-			GameOver();
+            GameOver();
 			return;
 		}
 
-		Invoke("PlayerTurn", 1.5f);
+		animate();
+
+        Invoke("PlayerTurn", 1.5f);
 	}
 
 	void PlayerTurn()
 	{
 		isPlayerTurn = true;
-		battleButton.SetActive(true);
+        animator.SetTrigger("BackToIdle");
+        battleButton.SetActive(true);
 		defendButton.SetActive(true);
 		messageText.text = "Your turn! Choose an action.";
 	}
@@ -254,7 +260,8 @@ public class GameManager : MonoBehaviour
 	void GameOver()
 	{
 		messageText.text = "GAME OVER! You were defeated...";
-		battleButton.SetActive(false);
+        animate();
+        battleButton.SetActive(false);
 		defendButton.SetActive(false);
 		Invoke("ResetGame", 3f);
 	}
@@ -289,5 +296,28 @@ public class GameManager : MonoBehaviour
 
 		if (enemyHealthText != null)
 			enemyHealthText.text = $"{enemyCurrentHP}/{enemyMaxHP}";
+
+	}
+
+	private void animate()
+	{
+		if (isMinigameActive != true)
+		{
+			if (defenseTurnsRemaining > 0 && playerCurrentHP != 0)
+			{
+				animator.SetTrigger("DefendTrigger");
+
+			}
+
+			else if(currentAction == "attack" && playerCurrentHP != 0)
+			{
+				animator.SetTrigger("AttackTrigger");
+			}
+
+			else if(playerCurrentHP == 0)
+			{
+				animator.SetTrigger("DeadTrigger");
+			}
+        }
 	}
 }
