@@ -30,10 +30,11 @@ public class GameManager : MonoBehaviour
 	public GameObject trackingMinigamePanel;   // Your third minigame (path tracking)
 
 	[Header("Battle Modifiers")]
-	public float defenseReductionDuration = 2;
 	private int defenseTurnsRemaining = 0;
-	private float damageReduction = 1f;
+	private float damageReduction = 0.5f;
 
+	public GameObject robotGuy;
+	public Animator animator;
 	private bool isPlayerTurn = true;
 	private bool isMinigameActive = false;
 	private string currentAction = "";
@@ -45,9 +46,9 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		animator = robotGuy.GetComponent<Animator>();
 		playerCurrentHP = playerMaxHP;
 		enemyCurrentHP = enemyMaxHP;
-
 
 		// Get references to minigame scripts
 		if (clickMinigamePanel != null)
@@ -95,7 +96,8 @@ public class GameManager : MonoBehaviour
 		if (!isPlayerTurn || isMinigameActive) return;
 
 		currentAction = "defend";
-		StartRandomMinigame();
+
+        StartRandomMinigame();
 	}
 
 	void StartRandomMinigame()
@@ -151,7 +153,8 @@ public class GameManager : MonoBehaviour
 		}
 		else if (currentAction == "defend")
 		{
-			ProcessDefend(performanceMultiplier);
+            ProcessDefend(performanceMultiplier);
+
 		}
 
 		isMinigameActive = false;
@@ -162,7 +165,8 @@ public class GameManager : MonoBehaviour
 		int damageDealt = Mathf.RoundToInt(playerBaseDamage * multiplier);
 		enemyCurrentHP -= damageDealt;
 
-		messageText.text = $"You dealt {damageDealt} damage! (x{multiplier:F1})";
+
+        messageText.text = $"You dealt {damageDealt} damage! (x{multiplier:F1})";
 
 		UpdateUI();
 
@@ -173,17 +177,26 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		Invoke("EnemyTurn", 1.5f);
+
+        Invoke("EnemyTurn", 1.5f);
 	}
 
 	void ProcessDefend(float multiplier)
 	{
-		damageReduction = 1f / multiplier;
-		defenseTurnsRemaining = 2;
+		
+		if (defenseTurnsRemaining == 0)
+		{
 
-		messageText.text = $"Defense up! Reducing damage to {damageReduction * 100}% for 2 turns.";
+            messageText.text = $"Defense up! Reducing damage to {damageReduction * 100}% for {Mathf.RoundToInt(multiplier)} turns.";
+        }
+		else
 
-		Invoke("EnemyTurn", 1.5f);
+			messageText.text = $"Defense up! Reducing damage to {damageReduction * 100}% for an additional {Mathf.RoundToInt(multiplier)} turns.";
+
+        defenseTurnsRemaining += Mathf.RoundToInt(multiplier);
+		
+
+        Invoke("EnemyTurn", 1.5f);
 	}
 
 	void EnemyTurn()
@@ -218,17 +231,20 @@ public class GameManager : MonoBehaviour
 		if (playerCurrentHP <= 0)
 		{
 			playerCurrentHP = 0;
-			GameOver();
+            GameOver();
 			return;
 		}
 
-		Invoke("PlayerTurn", 1.5f);
+		animate();
+
+        Invoke("PlayerTurn", 1.5f);
 	}
 
 	void PlayerTurn()
 	{
 		isPlayerTurn = true;
-		battleButton.SetActive(true);
+        animator.SetTrigger("BackToIdle");
+        battleButton.SetActive(true);
 		defendButton.SetActive(true);
 		messageText.text = "Your turn! Choose an action.";
 	}
@@ -244,7 +260,8 @@ public class GameManager : MonoBehaviour
 	void GameOver()
 	{
 		messageText.text = "GAME OVER! You were defeated...";
-		battleButton.SetActive(false);
+        animate();
+        battleButton.SetActive(false);
 		defendButton.SetActive(false);
 		Invoke("ResetGame", 3f);
 	}
@@ -262,7 +279,7 @@ public class GameManager : MonoBehaviour
 
 	void UpdateUI()
 	{
-		if (playerHealthBar != null)
+        if (playerHealthBar != null)
 		{
 			playerHealthBar.maxValue = playerMaxHP;
 			playerHealthBar.value = playerCurrentHP;
@@ -279,5 +296,28 @@ public class GameManager : MonoBehaviour
 
 		if (enemyHealthText != null)
 			enemyHealthText.text = $"{enemyCurrentHP}/{enemyMaxHP}";
+
+	}
+
+	private void animate()
+	{
+		if (isMinigameActive != true)
+		{
+			if (defenseTurnsRemaining > 0 && playerCurrentHP != 0)
+			{
+				animator.SetTrigger("DefendTrigger");
+
+			}
+
+			else if(currentAction == "attack" && playerCurrentHP != 0)
+			{
+				animator.SetTrigger("AttackTrigger");
+			}
+
+			else if(playerCurrentHP == 0)
+			{
+				animator.SetTrigger("DeadTrigger");
+			}
+        }
 	}
 }
