@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,6 +13,9 @@ public class TrackingMinigame : MonoBehaviour
 	public float pathLength = 12f;
 	public float curveHeight = 4f;
 	public int curveSegments = 3;
+	public bool showPath = true; // TOGGLE THIS to show/hide the path line
+	public Color pathColor = Color.gray; // Color of the path line
+	public float pathLineWidth = 0.1f; // Width of the path line
 
 	[Header("Tracking Settings")]
 	public float trackingSpeed = 2f;
@@ -31,6 +34,7 @@ public class TrackingMinigame : MonoBehaviour
 	private GameObject endCircle;
 	private GameObject trackingCircle;
 	private List<Vector2> pathPoints = new List<Vector2>();
+	private LineRenderer pathLine; // Reference to the line renderer
 
 	private bool isActive = false;
 	private bool isTracking = false;
@@ -170,6 +174,69 @@ public class TrackingMinigame : MonoBehaviour
 
 		if (startCircle.GetComponent<Collider2D>() == null)
 			startCircle.AddComponent<CircleCollider2D>();
+
+		// Create the path line if showPath is enabled
+		if (showPath)
+		{
+			CreatePathLine();
+		}
+	}
+
+	// NEW METHOD: Creates a visual line along the path
+	void CreatePathLine()
+	{
+		// Add LineRenderer component if it doesn't exist
+		pathLine = GetComponent<LineRenderer>();
+		if (pathLine == null)
+			pathLine = gameObject.AddComponent<LineRenderer>();
+
+		// Configure the LineRenderer
+		pathLine.positionCount = pathPoints.Count;
+		pathLine.startWidth = pathLineWidth;
+		pathLine.endWidth = pathLineWidth;
+		pathLine.startColor = pathColor;
+		pathLine.endColor = pathColor;
+		pathLine.material = new Material(Shader.Find("Sprites/Default"));
+		pathLine.sortingOrder = -1; // Render behind circles
+
+		// Set all the positions
+		for (int i = 0; i < pathPoints.Count; i++)
+		{
+			pathLine.SetPosition(i, new Vector3(pathPoints[i].x, pathPoints[i].y, 0));
+		}
+	}
+
+	// NEW METHOD: Toggle path visibility at runtime
+	public void TogglePathVisibility()
+	{
+		showPath = !showPath;
+
+		if (pathLine != null)
+		{
+			pathLine.enabled = showPath;
+		}
+		else if (showPath && pathPoints.Count > 0)
+		{
+			// If turning on and line doesn't exist, create it
+			CreatePathLine();
+		}
+
+		Debug.Log($"Path visibility: {showPath}");
+	}
+
+	// NEW METHOD: Set path visibility directly
+	public void SetPathVisibility(bool visible)
+	{
+		showPath = visible;
+
+		if (pathLine != null)
+		{
+			pathLine.enabled = visible;
+		}
+		else if (visible && pathPoints.Count > 0)
+		{
+			CreatePathLine();
+		}
 	}
 
 	List<Vector2> GeneratePathPoints(Vector2 start, Vector2 end)
@@ -326,6 +393,13 @@ public class TrackingMinigame : MonoBehaviour
 		{
 			Destroy(trackingCircle);
 			trackingCircle = null;
+		}
+
+		// Destroy path line
+		if (pathLine != null)
+		{
+			Destroy(pathLine);
+			pathLine = null;
 		}
 
 		// Clear path points
