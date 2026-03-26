@@ -34,7 +34,12 @@ public class GameManager : MonoBehaviour
 	private float damageReduction = 0.5f;
 
 	public GameObject robotGuy;
-	public Animator animator;
+	private Animator RobotAnimator;
+
+	public GameObject plantGuy;
+	private Animator plantAnimator;
+
+
 	private bool isPlayerTurn = true;
 	private bool isMinigameActive = false;
 	private string currentAction = "";
@@ -46,7 +51,8 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
-		animator = robotGuy.GetComponent<Animator>();
+		RobotAnimator = robotGuy.GetComponent<Animator>();
+		plantAnimator = plantGuy.GetComponent<Animator>();
 		playerCurrentHP = playerMaxHP;
 		enemyCurrentHP = enemyMaxHP;
 
@@ -170,6 +176,9 @@ public class GameManager : MonoBehaviour
 
 		UpdateUI();
 
+		PlayCombatAnimations();
+
+
 		if (enemyCurrentHP <= 0)
 		{
 			enemyCurrentHP = 0;
@@ -178,7 +187,7 @@ public class GameManager : MonoBehaviour
 		}
 
 
-        Invoke("EnemyTurn", 1.5f);
+        Invoke("EnemyTurn", 2.5f);
 	}
 
 	void ProcessDefend(float multiplier)
@@ -196,16 +205,20 @@ public class GameManager : MonoBehaviour
         defenseTurnsRemaining += Mathf.RoundToInt(multiplier);
 		
 
-        Invoke("EnemyTurn", 1.5f);
+        Invoke("EnemyTurn", 2.5f);
 	}
 
 	void EnemyTurn()
 	{
+		plantAnimator.SetTrigger("goBackToIdle");
+
 		isPlayerTurn = false;
+
+		bool defenseWasActive = defenseTurnsRemaining > 0;
 
 		int damageToPlayer = enemyBaseDamage;
 
-		if (defenseTurnsRemaining > 0)
+		if (defenseWasActive)
 		{
 			damageToPlayer = Mathf.RoundToInt(damageToPlayer * damageReduction);
 			defenseTurnsRemaining--;
@@ -228,6 +241,8 @@ public class GameManager : MonoBehaviour
 		playerCurrentHP -= damageToPlayer;
 		UpdateUI();
 
+		PlayCombatAnimations(defenseWasActive);
+
 		if (playerCurrentHP <= 0)
 		{
 			playerCurrentHP = 0;
@@ -235,15 +250,16 @@ public class GameManager : MonoBehaviour
 			return;
 		}
 
-		animate();
 
-        Invoke("PlayerTurn", 1.5f);
+        Invoke("PlayerTurn", 2.5f);
 	}
 
 	void PlayerTurn()
 	{
 		isPlayerTurn = true;
-        animator.SetTrigger("BackToIdle");
+		currentAction = "";
+        RobotAnimator.SetTrigger("BackToIdle");
+		plantAnimator.SetTrigger("goBackToIdle");
         battleButton.SetActive(true);
 		defendButton.SetActive(true);
 		messageText.text = "Your turn! Choose an action.";
@@ -260,7 +276,6 @@ public class GameManager : MonoBehaviour
 	void GameOver()
 	{
 		messageText.text = "GAME OVER! You were defeated...";
-        animate();
         battleButton.SetActive(false);
 		defendButton.SetActive(false);
 		Invoke("ResetGame", 3f);
@@ -299,25 +314,47 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	private void animate()
+	private void PlayCombatAnimations(bool enemyAttackDefenseActive = false)
 	{
-		if (isMinigameActive != true)
+		// Death first
+		if (playerCurrentHP <= 0)
 		{
-			if (defenseTurnsRemaining > 0 && playerCurrentHP != 0)
-			{
-				animator.SetTrigger("DefendTrigger");
+			RobotAnimator.SetTrigger("DeadTrigger");
+			return;
+		}
+		if (enemyCurrentHP <= 0)
+		{
+			plantAnimator.SetTrigger("dieTrigger");
+			return;
+		}
 
-			}
-
-			else if(currentAction == "attack" && playerCurrentHP != 0)
+		// Not dead
+		if (isPlayerTurn)
+		{	
+			if (currentAction == "attack")
 			{
-				animator.SetTrigger("AttackTrigger");
+				// Player attack
+				RobotAnimator.SetTrigger("AttackTrigger");
+				plantAnimator.SetTrigger("hitTrigger");
 			}
-
-			else if(playerCurrentHP == 0)
+			else if (currentAction == "defend")
 			{
-				animator.SetTrigger("DeadTrigger");
+				RobotAnimator.SetTrigger("DefendTrigger");
 			}
-        }
+				
+		}
+		else if (!isPlayerTurn)
+		{
+			// Enemy attack
+			plantAnimator.SetTrigger("attackTrigger");
+			if (enemyAttackDefenseActive)
+			{
+				RobotAnimator.SetTrigger("DefendTrigger");
+			}
+			else
+			{
+				RobotAnimator.SetTrigger("BackToIdle");
+			}
+		}
 	}
 }
