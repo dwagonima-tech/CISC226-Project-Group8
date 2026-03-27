@@ -201,8 +201,9 @@ public class MainMenu : MonoBehaviour
                 if (hasSaveData)
                 {
                     // You can display additional info like playtime, level, etc.
-                    string playTime = PlayerPrefs.GetString($"SaveSlot_{i}_PlayTime", "0h");
-                    saveSlotTexts[i].text = $"Slot {i + 1}\nPlay Time: {playTime}";
+                    string levels = PlayerPrefs.GetString($"{i}_LevelsCompleted", "0");
+                    float score = PlayerPrefs.GetFloat($"{i}_score", 0f);
+                    saveSlotTexts[i].text = $"Slot {i + 1}\nLevels Completed: {levels}";
                 }
                 else
                 {
@@ -233,8 +234,13 @@ public class MainMenu : MonoBehaviour
         }
 
         // Save the selected slot index for the next scene
+        PlayerPrefs.SetInt($"SaveSlot_{slotIndex}_Exists", 1);
         PlayerPrefs.SetInt("SelectedSaveSlot", slotIndex);
-        PlayerPrefs.SetInt("IsNewGame", isNewGameMode ? 1 : 0);
+        if (isNewGameMode)
+        {
+            PlayerPrefs.SetInt($"{slotIndex}_LevelsCompleted", 0);
+            PlayerPrefs.SetFloat($"{slotIndex}_score", 0);
+        }
         PlayerPrefs.Save();
 
         // Start the game
@@ -266,7 +272,7 @@ public class MainMenu : MonoBehaviour
         }
 
         // Load the game scene
-        SceneManager.LoadScene("Level01"); // TEMPORARY!!!!!!!!! CHANGE LATER
+        SceneManager.LoadScene("LevelSelect"); 
     }
 
 	// Method for Options button

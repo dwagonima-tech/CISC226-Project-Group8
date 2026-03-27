@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro; 
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
 	public int playerMaxHP = 50;
 	public int playerCurrentHP;
 	public int playerBaseDamage = 10;
+	private float score = 0f;
 
 	[Header("Enemy Stats")]
 	public int enemyMaxHP = 200;
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
 	public GameObject plantGuy;
 	private Animator plantAnimator;
 
-
+	private int saveSlot;
 	private bool isPlayerTurn = true;
 	private bool isMinigameActive = false;
 	private string currentAction = "";
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
 
 	void Start()
 	{
+		saveSlot = PlayerPrefs.GetInt("SelectedSaveSlot");
 		RobotAnimator = robotGuy.GetComponent<Animator>();
 		plantAnimator = plantGuy.GetComponent<Animator>();
 		playerCurrentHP = playerMaxHP;
@@ -171,6 +174,8 @@ public class GameManager : MonoBehaviour
 		int damageDealt = Mathf.RoundToInt(playerBaseDamage * multiplier);
 		enemyCurrentHP -= damageDealt;
 
+		score += 100f * multiplier;
+
 
         messageText.text = $"You dealt {damageDealt} damage! (x{multiplier:F1})";
 
@@ -283,13 +288,15 @@ public class GameManager : MonoBehaviour
 
 	void ResetGame()
 	{
-		playerCurrentHP = playerMaxHP;
-		enemyCurrentHP = enemyMaxHP;
-		defenseTurnsRemaining = 0;
-		damageReduction = 1f;
+		float oldScore = PlayerPrefs.GetFloat($"{saveSlot}_score");
+		float newScore = score + oldScore;
 
-		UpdateUI();
-		PlayerTurn();
+		PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
+		PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", 1); // Only for when level 1 is completed
+															  // change for later levels, subclass perhaps?
+		PlayerPrefs.Save();
+		Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+		SceneManager.LoadScene("LevelSelect");
 	}
 
 	void UpdateUI()
