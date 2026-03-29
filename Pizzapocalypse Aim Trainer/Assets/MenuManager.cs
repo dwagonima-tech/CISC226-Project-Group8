@@ -201,7 +201,7 @@ public class MainMenu : MonoBehaviour
                 if (hasSaveData)
                 {
                     // You can display additional info like playtime, level, etc.
-                    string levels = PlayerPrefs.GetString($"{i}_LevelsCompleted", "0");
+                    int levels = PlayerPrefs.GetInt($"{i}_LevelsCompleted", 0);
                     float score = PlayerPrefs.GetFloat($"{i}_score", 0f);
                     saveSlotTexts[i].text = $"Slot {i + 1}\nLevels Completed: {levels}";
                 }

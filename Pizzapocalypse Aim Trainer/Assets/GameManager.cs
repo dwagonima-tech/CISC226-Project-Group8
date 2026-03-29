@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
 	public GameObject plantGuy;
 	private Animator plantAnimator;
 
+	[Header("Level Attributes")]
+	public int currentLevel;
 	private int saveSlot;
 	private bool isPlayerTurn = true;
 	private bool isMinigameActive = false;
@@ -291,9 +293,15 @@ public class GameManager : MonoBehaviour
 		float oldScore = PlayerPrefs.GetFloat($"{saveSlot}_score");
 		float newScore = score + oldScore;
 
+		int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
+
+		if (currentLevel > levelsCompleted)
+		{
+            PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+        }
+
 		PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
-		PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", 1); // Only for when level 1 is completed
-															  // change for later levels, subclass perhaps?
+		 
 		PlayerPrefs.Save();
 		Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
 		SceneManager.LoadScene("LevelSelect");

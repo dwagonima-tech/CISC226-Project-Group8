@@ -2688,12 +2688,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -2959024078001995069, guid: bdee6c8bd2975064c9b0c879bb05b625, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3cdc16d8776ff36468c88316ed11d7b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.51, y: 0.42}
+  m_Size: {x: 34.88, y: 34.88}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -2707,9 +2707,9 @@ Transform:
   m_GameObject: {fileID: 1181882817}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.22, y: -4.56, z: 0}
-  m_LocalScale: {x: 15.953381, y: 15.569457, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 5.2224693, y: -3.460928, z: 0}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3305,7 +3305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   playerMaxHP: 50
   playerCurrentHP: 0
-  playerBaseDamage: 10
+  playerBaseDamage: 100
   enemyMaxHP: 100
   enemyCurrentHP: 0
   enemyBaseDamage: 5
@@ -3321,6 +3321,7 @@ MonoBehaviour:
   trackingMinigamePanel: {fileID: 1131755231}
   robotGuy: {fileID: 1484166672}
   plantGuy: {fileID: 1181882817}
+  currentLevel: 1
 --- !u!4 &1532041048
 Transform:
   m_ObjectHideFlags: 0

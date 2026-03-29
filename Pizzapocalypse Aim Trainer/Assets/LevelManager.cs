@@ -49,11 +49,7 @@ public class LevelManager : MonoBehaviour
 
     public void onLevelClicked(int level)
     {
-        
-        if (level == 1)
-        {
-            SceneManager.LoadScene("Level01");
-        }
+         SceneManager.LoadScene($"Level0{level}");
     }
 
     void activateMap(int levelsCompleted)
