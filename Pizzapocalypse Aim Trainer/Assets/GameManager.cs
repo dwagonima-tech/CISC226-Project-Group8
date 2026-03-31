@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 	private int defenseTurnsRemaining = 0;
 	private float damageReduction = 0.5f;
 
-	public GameObject robotGuy;
+	private GameObject robotUsed;
 	private Animator RobotAnimator;
 
 	public GameObject plantGuy;
@@ -56,7 +56,31 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		saveSlot = PlayerPrefs.GetInt("SelectedSaveSlot");
-		RobotAnimator = robotGuy.GetComponent<Animator>();
+		string currentBot = PlayerPrefs.GetString("selectedBot");
+
+		FindSpawnedRobot();
+
+		setupAttributes(currentBot);
+
+		if (robotUsed != null)
+		{
+			RobotAnimator = robotUsed.GetComponent<Animator>();
+			if (RobotAnimator == null)
+			{
+				Debug.LogError("Robot prefab missing Animator!");
+			}
+			else
+			{
+				Debug.Log("Animator Found!");
+			}
+
+		}
+		else
+		{
+			Debug.LogError("Failed to find spawned robot in scene!");
+		}
+
+
 		plantAnimator = plantGuy.GetComponent<Animator>();
 		playerCurrentHP = playerMaxHP;
 		enemyCurrentHP = enemyMaxHP;
@@ -79,6 +103,39 @@ public class GameManager : MonoBehaviour
 		Debug.Log("GameManager Started - Buttons should be active");
 	}
 
+	void FindSpawnedRobot()
+	{
+		GameObject robotByTag = GameObject.FindGameObjectWithTag("Player");
+
+		if (robotByTag != null)
+		{
+			robotUsed = robotByTag;
+			Debug.Log("Found robot by tag: " +  robotUsed.name);
+			return;
+		}
+	}
+
+	void setupAttributes(string bot)
+	{
+		if (bot == "Jerry")
+		{
+			playerMaxHP = 75;
+			playerBaseDamage = 15;
+			damageReduction = 0.5f;
+		}
+		else if (bot == "Paul")
+		{
+			playerMaxHP = 60;
+			playerBaseDamage = 25;
+			damageReduction = 0.25f;
+		}
+		else if (bot == "Harold")
+		{
+			playerMaxHP = 150;
+			playerBaseDamage = 10;
+			damageReduction = 0.75f;
+		}
+	}
 
 
 	void HideAllMinigamePanels()
@@ -119,7 +176,7 @@ public class GameManager : MonoBehaviour
 		messageText.text = "Complete the minigame!";
 
 		// Choose random minigame
-		int randomIndex = 1;//Random.Range(0, 3); // 0, 1, or 2
+		int randomIndex = Random.Range(0, 3); // 0, 1, or 2
 
 		switch (randomIndex)
 		{
@@ -327,6 +384,21 @@ public class GameManager : MonoBehaviour
 		if (enemyHealthText != null)
 			enemyHealthText.text = $"{enemyCurrentHP}/{enemyMaxHP}";
 
+	}
+
+	public void OnRobotSpawned(GameObject spawnedRobot)
+	{
+		robotUsed = spawnedRobot;
+		RobotAnimator = robotUsed.GetComponent<Animator>();
+
+		if (RobotAnimator != null)
+		{
+			Debug.Log("Robot received from spawner: " + robotUsed.name);
+		}
+		else
+		{
+			Debug.LogError("Robot prefab missing Animator!");
+		}
 	}
 
 	private void PlayCombatAnimations(bool enemyAttackDefenseActive = false)
