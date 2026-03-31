@@ -14,6 +14,7 @@ public class ClickMinigame : MonoBehaviour
 	private float startTime;
 	private bool isActive = false;
 	private GameObject currentCircle;
+	private bool isWaitingForAnimation = false;
 
 	public float spawnMinX = -6f;
 	public float spawnMaxX = 6f;
@@ -23,6 +24,7 @@ public class ClickMinigame : MonoBehaviour
 	void Start()
 	{
 		gameManager = FindFirstObjectByType<GameManager>();
+
 	}
 
 	public void StartMinigame()
@@ -42,13 +44,19 @@ public class ClickMinigame : MonoBehaviour
 	{
 		if (!isActive) return;
 
-		Vector2 randomPos = new Vector2(
-			Random.Range(spawnMinX, spawnMaxX),
-			Random.Range(spawnMinY, spawnMaxY)
-		);
+		Vector2 randomPos = new Vector2(Random.Range(spawnMinX, spawnMaxX), Random.Range(spawnMinY, spawnMaxY));
 
 		currentCircle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
 		currentCircle.transform.localScale = new Vector3(CircleSize, CircleSize, CircleSize);
+
+		CircleAnimationEvents animEvents = currentCircle.GetComponent<CircleAnimationEvents>();
+		if (animEvents == null)
+		{
+			animEvents = currentCircle.AddComponent<CircleAnimationEvents>();
+		}
+		animEvents.Initialize(this);
+
+
 
 		// ABSOLUTELY CRITICAL: Ensure circle has a collider
 		CircleCollider2D collider = currentCircle.GetComponent<CircleCollider2D>();
@@ -63,6 +71,8 @@ public class ClickMinigame : MonoBehaviour
 		// Add click handler
 		ClickCircleHandler handler = currentCircle.AddComponent<ClickCircleHandler>();
 		handler.minigame = this;
+
+		isWaitingForAnimation = false;
 	}
 
 	IEnumerator TimerRoutine()
@@ -78,12 +88,75 @@ public class ClickMinigame : MonoBehaviour
 
 	public void CircleClicked()
 	{
-		if (!isActive) return;
+		if (!isActive || isWaitingForAnimation || currentCircle == null) return;
 
 		circlesClicked++;
 		Debug.Log($"Circle clicked: {circlesClicked}/{totalCirclesToSpawn}");
 
-		ClearCurrentCircle();
+		// Prevent multiple clicks
+		Collider2D collider = currentCircle.GetComponent<Collider2D>();
+		if( collider != null)
+		{
+			collider.enabled = false;
+			Debug.Log("Collider disabled");
+		}
+
+		// Trigger animation
+		Animator anim = currentCircle.GetComponent<Animator>();
+		if (anim != null)
+		{
+
+			Debug.Log($"Animator found. Controller: {anim.runtimeAnimatorController?.name}");
+			AnimatorStateInfo currentState = anim.GetCurrentAnimatorStateInfo(0);
+
+			isWaitingForAnimation = true;
+			anim.SetBool("isBroken", true);
+
+		}
+
+		else
+		{
+			Debug.Log("No Animator found on circle!");
+			DestroyCurrentCircleAndContinue();
+		}
+
+	}
+
+
+	public void OnCircleAnimationComplete(GameObject circle)
+	{
+		 Debug.Log($"OnCircleAnimationComplete called for circle: {circle.name}");
+        
+        // Make sure we're not processing the same circle twice
+        if (circle != currentCircle)
+        {
+            Debug.Log($"Circle {circle.name} is not currentCircle, destroying it");
+            Destroy(circle);
+            return;
+        }
+        
+        if (!isActive)
+        {
+            Debug.Log("Minigame not active, destroying circle");
+            Destroy(circle);
+            currentCircle = null;
+            return;
+        }
+        
+        // Now destroy the circle and continue
+        Debug.Log("Animation complete, destroying circle and continuing");
+        DestroyCurrentCircleAndContinue();
+	}
+
+	void DestroyCurrentCircleAndContinue()
+	{
+		if (currentCircle != null)
+		{
+			Destroy(currentCircle);
+			currentCircle = null;
+		}
+
+		isWaitingForAnimation = false;
 
 		if (circlesClicked >= totalCirclesToSpawn)
 		{
@@ -98,6 +171,8 @@ public class ClickMinigame : MonoBehaviour
 		}
 	}
 
+
+
 	void ClearCurrentCircle()
 	{
 		if (currentCircle != null)
@@ -109,11 +184,16 @@ public class ClickMinigame : MonoBehaviour
 		if (!isActive) return;
 
 		isActive = false;
-		StopAllCoroutines();
+		isWaitingForAnimation = false;
 
 		float multiplier = 1f + (score / 100f) * 3f;
 
-		ClearCurrentCircle();
+		if (currentCircle != null)
+		{
+			Destroy(currentCircle);
+			currentCircle = null;
+
+		}
 
 		if (gameManager != null)
 			gameManager.MinigameComplete(multiplier);
@@ -146,7 +226,6 @@ public class ClickCircleHandler : MonoBehaviour
 				Debug.Log("Circle clicked with Input System!");
 				if (minigame != null)
 					minigame.CircleClicked();
-				Destroy(gameObject);
 			}
 		}
 	}

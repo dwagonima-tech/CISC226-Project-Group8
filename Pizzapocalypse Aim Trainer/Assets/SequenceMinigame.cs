@@ -16,6 +16,9 @@ public class SequenceMinigame : MonoBehaviour
 	private int circlesClicked = 0;
 	private bool gameActive = false;
 	private float startTime;
+	private bool isWaitingForAnimation = false;
+
+	private List<Vector2> circlePositions = new List<Vector2>();
 
 	// Fixed spawn area
 	public float minX = -6f;
@@ -32,6 +35,7 @@ public class SequenceMinigame : MonoBehaviour
 	{
 		circlesClicked = 0;
 		startTime = Time.time;
+		isWaitingForAnimation = false;
 
 		ClearCircles();
 
@@ -50,13 +54,26 @@ public class SequenceMinigame : MonoBehaviour
 
 	void SpawnCircle(int index)
 	{
-		Vector2 randomPos = new Vector2(
-			Random.Range(minX, maxX),
-			Random.Range(minY, maxY)
-		);
+		Vector2 randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+
+		while (circlePositions.Contains(randomPos))
+		{
+			randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+
+		}
+
+		circlePositions.Add(randomPos);
+
 
 		GameObject circle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
         circle.transform.localScale = new Vector3(CircleSize, CircleSize, CircleSize);
+
+		CircleAnimationEvents animEvents = circle.GetComponent<CircleAnimationEvents>();
+		if (animEvents == null)
+		{
+			animEvents = circle.AddComponent<CircleAnimationEvents>();
+		}
+		animEvents.InitializeForSequence(this);
 
         // CRITICAL: Add collider
         CircleCollider2D collider = circle.GetComponent<CircleCollider2D>();
@@ -71,7 +88,6 @@ public class SequenceMinigame : MonoBehaviour
 		// Add handler
 		SequenceCircleHandler handler = circle.AddComponent<SequenceCircleHandler>();
 		handler.minigame = this;
-		handler.circleIndex = index;
 		handler.isActive = false;
 
 		circles.Add(circle);
@@ -103,6 +119,11 @@ public class SequenceMinigame : MonoBehaviour
 			handler.SetActive(true);
 			Debug.Log($"Activated circle {circlesClicked + 1}");
 		}
+
+		else if (circlesClicked >= numberOfCircles)
+		{
+			CompleteMinigame(100f);
+		}
 	}
 
 	IEnumerator TimerRoutine()
@@ -116,25 +137,57 @@ public class SequenceMinigame : MonoBehaviour
 		}
 	}
 
-	public void CircleClicked(int index)
+	public void CircleClicked(GameObject clickedCircle)
 	{
-		if (!gameActive) return;
+		if (!gameActive || isWaitingForAnimation) return;
 
-		SequenceCircleHandler handler = circles[index].GetComponent<SequenceCircleHandler>();
+		if (clickedCircle == null)
+		{
+			Debug.LogWarning("Clicked circle is null!");
+			return;
+		}
+		SequenceCircleHandler handler = clickedCircle.GetComponent<SequenceCircleHandler>();
 
-		if (handler != null && handler.isActive)
+		if (handler != null && handler.isActive && !handler.wasClicked)
 		{
 			// Correct click
 			circlesClicked++;
 			handler.wasClicked = true;
 			handler.isActive = false;
 
-			// Change to green
-			SpriteRenderer renderer = circles[index].GetComponent<SpriteRenderer>();
-			if (renderer != null)
-				renderer.color = Color.green;
+			Collider2D collider = clickedCircle.GetComponent<Collider2D>();
+			if (collider != null)
+			{
+				collider.enabled = false;
+			}
 
-			Debug.Log($"Correct! {circlesClicked}/{numberOfCircles}");
+			Animator anim = clickedCircle.GetComponent<Animator>();
+			if (anim != null)
+			{
+				isWaitingForAnimation = true;
+				handler.isAnimating = true;
+				anim.SetBool("isBroken", true);
+			}
+
+			else
+			{
+				DestroyCircleAndContinue(clickedCircle);
+			}
+		}
+		else
+		{
+			Debug.Log($"Invalid click on {clickedCircle.name} - isActive: {handler?.isActive}, wasClicked: {handler?.wasClicked}");
+		}
+	}
+
+	public void OnCircleAnimationComplete(GameObject circle)
+	{
+		Debug.Log($"Animation complete for circle {circle?.name}");
+
+		if (circle == null)
+		{
+			Debug.LogWarning("Circle is null in animation complete");
+			isWaitingForAnimation = false;
 
 			if (circlesClicked >= numberOfCircles)
 			{
@@ -144,7 +197,48 @@ public class SequenceMinigame : MonoBehaviour
 			{
 				Invoke("ActivateRandomCircle", delayBetweenRounds);
 			}
+			return;
 		}
+
+		// Destroy the circle
+		if (circles.Contains(circle))
+		{
+			circles.Remove(circle);
+			Destroy(circle);
+		}
+
+		isWaitingForAnimation = false;
+
+		if (circlesClicked >= numberOfCircles)
+		{
+			CompleteMinigame(100f);
+		}
+
+		else
+		{
+			Invoke("ActivateRandomCircle", delayBetweenRounds);
+		}
+	}
+
+	void DestroyCircleAndContinue(GameObject circle)
+	{
+		if (circle != null && circles.Contains(circle))
+		{
+			circles.Remove(circle);
+			Destroy(circle);
+		}
+
+		isWaitingForAnimation = false;
+
+		if (circlesClicked >= numberOfCircles)
+		{
+			CompleteMinigame(100f);
+		}
+		else
+		{
+			Invoke("ActivateRandomCircle", delayBetweenRounds);
+		}
+		
 	}
 
 	void CompleteMinigame(float score)
@@ -152,6 +246,7 @@ public class SequenceMinigame : MonoBehaviour
 		if (!gameActive) return;
 
 		gameActive = false;
+		isWaitingForAnimation = false;
 		CancelInvoke();
 		StopAllCoroutines();
 
@@ -179,9 +274,9 @@ public class SequenceMinigame : MonoBehaviour
 public class SequenceCircleHandler : MonoBehaviour
 {
 	public SequenceMinigame minigame;
-	public int circleIndex;
 	public bool isActive = false;
 	public bool wasClicked = false;
+	public bool isAnimating = false;
 
 	private SpriteRenderer spriteRenderer;
 	private Camera mainCamera;
@@ -194,7 +289,8 @@ public class SequenceCircleHandler : MonoBehaviour
 
 	void Update()
 	{
-		if (isActive && Mouse.current.leftButton.wasPressedThisFrame)
+		
+		if (isActive && !wasClicked && !isAnimating && Mouse.current.leftButton.wasPressedThisFrame)
 		{
 			Vector2 mousePos = Mouse.current.position.ReadValue();
 			Vector2 worldPoint = mainCamera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 0));
@@ -203,9 +299,9 @@ public class SequenceCircleHandler : MonoBehaviour
 
 			if (hit != null && hit.gameObject == gameObject)
 			{
-				Debug.Log($"Sequence circle {circleIndex} clicked with Input System!");
+				Debug.Log($"Sequence circle {gameObject.name} clicked with Input System!");
 				if (minigame != null)
-					minigame.CircleClicked(circleIndex);
+					minigame.CircleClicked(gameObject);
 			}
 		}
 	}

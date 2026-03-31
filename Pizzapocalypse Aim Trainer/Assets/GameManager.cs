@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 		messageText.text = "Complete the minigame!";
 
 		// Choose random minigame
-		int randomIndex = Random.Range(0, 3); // 0, 1, or 2
+		int randomIndex = 1;//Random.Range(0, 3); // 0, 1, or 2
 
 		switch (randomIndex)
 		{
