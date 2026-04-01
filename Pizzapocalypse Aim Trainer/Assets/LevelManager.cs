@@ -52,8 +52,11 @@ public class LevelManager : MonoBehaviour
         if (levelButtons[5] != null)
             levelButtons[5].onClick.AddListener(() => onLevelClicked(6));
 
-        // Robot buttons
-        if (robotButtons[0] != null)
+		if (levelButtons[6] != null)
+			levelButtons[6].onClick.AddListener(() => onLevelClicked(6));
+
+		// Robot buttons
+		if (robotButtons[0] != null)
             robotButtons[0].onClick.AddListener(() => OnRobotSelected("Jerry"));
 
 		if (robotButtons[1] != null)
@@ -97,13 +100,13 @@ public class LevelManager : MonoBehaviour
     {   
         if (levelsCompleted > 0)
         {
-            for (int i = 0; i < levelsCompleted; i++)
+            for (int i = 0; i < levelsCompleted+1; i++)
             {
                 levelButtons[i].interactable = true;
                 Debug.Log("Level " + i + " Should be active");
 
             }
-            for (int i = levelsCompleted; i < 6; i++)
+            for (int i = levelsCompleted+1; i < 7; i++)
             {
                 levelButtons[i].interactable = false;
             }
@@ -111,7 +114,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             levelButtons[0].interactable = true;
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i < 7; i++)
             {
                 levelButtons[i].interactable = false;
             }

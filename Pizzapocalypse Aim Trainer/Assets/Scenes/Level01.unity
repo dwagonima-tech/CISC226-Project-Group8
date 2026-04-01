@@ -2532,7 +2532,7 @@ MonoBehaviour:
   curveSegments: 3
   showPath: 1
   pathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  pathLineWidth: 0.1
+  pathLineWidth: 1
   trackingSpeed: 2
   circleScale: 1
   successRadius: 1.5
@@ -3284,10 +3284,6 @@ MonoBehaviour:
   clickMinigamePanel: {fileID: 1704027960}
   sequenceMinigamePanel: {fileID: 1263584633}
   trackingMinigamePanel: {fileID: 1131755231}
-  robotGuys:
-  - {fileID: 528624720778365204, guid: a24ff873debbdb040b1b2d35213683e1, type: 3}
-  - {fileID: 8928623328957998973, guid: f7c2fb5aedac25948a7843ac492dd1be, type: 3}
-  - {fileID: 3325539331661295865, guid: 779c4b30f797325448b09b1b5c4b516c, type: 3}
   plantGuy: {fileID: 1181882817}
   currentLevel: 1
 --- !u!4 &1532041048
@@ -3598,7 +3594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
   totalCirclesToSpawn: 10
-  timeLimit: 3
+  timeLimit: 5
   CircleSize: 1
   spawnMinX: -12
   spawnMaxX: 12
