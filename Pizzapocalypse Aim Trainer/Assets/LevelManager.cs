@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
             levelButtons[5].onClick.AddListener(() => onLevelClicked(6));
 
 		if (levelButtons[6] != null)
-			levelButtons[6].onClick.AddListener(() => onLevelClicked(6));
+			levelButtons[6].onClick.AddListener(() => onLevelClicked(7));
 
 		// Robot buttons
 		if (robotButtons[0] != null)
