@@ -1834,14 +1834,14 @@ MonoBehaviour:
   endCirclePrefab: {fileID: 7504855207052046987, guid: 687cdde849eddbc418f60cfa543d4211, type: 3}
   trackingCirclePrefab: {fileID: 2757072029295756281, guid: 6b9965bd34d4c7d46951edf82a152b02, type: 3}
   pathLength: 12
-  curveHeight: 4
+  curveHeight: 7
   curveSegments: 3
   showPath: 1
   pathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   pathLineWidth: 0.1
-  trackingSpeed: 2
+  trackingSpeed: 7
   circleScale: 1
-  successRadius: 1.5
+  successRadius: 1.75
   startLeewayTime: 5
   minX: -14
   maxX: 14
@@ -2188,10 +2188,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
-  numberOfCircles: 5
-  CircleSize: 1
-  delayBetweenRounds: 0.5
-  timeLimit: 30
+  numberOfCircles: 20
+  CircleSize: 0.5
+  delayBetweenRounds: 0
+  timeLimit: 20
   minX: -12
   maxX: 12
   minY: -6
@@ -2577,9 +2577,9 @@ MonoBehaviour:
   playerMaxHP: 50
   playerCurrentHP: 0
   playerBaseDamage: 10
-  enemyMaxHP: 100
+  enemyMaxHP: 1000
   enemyCurrentHP: 0
-  enemyBaseDamage: 5
+  enemyBaseDamage: 15
   playerHealthBar: {fileID: 244012282}
   enemyHealthBar: {fileID: 1983214838}
   playerHealthText: {fileID: 1454075818}
@@ -2856,9 +2856,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
-  totalCirclesToSpawn: 10
-  timeLimit: 3
-  CircleSize: 1
+  totalCirclesToSpawn: 20
+  timeLimit: 10
+  CircleSize: 0.5
   spawnMinX: -12
   spawnMaxX: 12
   spawnMinY: -6

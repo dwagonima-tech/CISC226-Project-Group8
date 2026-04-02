@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro; 
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class GameManager : MonoBehaviour
 {
@@ -119,21 +120,21 @@ public class GameManager : MonoBehaviour
 	{
 		if (bot == "Jerry")
 		{
-			playerMaxHP = 75;
-			playerBaseDamage = 15;
+			playerMaxHP = 150;
+			playerBaseDamage = 25;
 			damageReduction = 0.5f;
 		}
 		else if (bot == "Paul")
 		{
-			playerMaxHP = 60;
-			playerBaseDamage = 25;
-			damageReduction = 0.25f;
+			playerMaxHP = 100;
+			playerBaseDamage = 45;
+			damageReduction = 0.75f;
 		}
 		else if (bot == "Harold")
 		{
-			playerMaxHP = 150;
-			playerBaseDamage = 10;
-			damageReduction = 0.75f;
+			playerMaxHP = 200;
+			playerBaseDamage = 15;
+			damageReduction = 0.25f;
 		}
 	}
 
@@ -347,21 +348,45 @@ public class GameManager : MonoBehaviour
 
 	void ResetGame()
 	{
-		float oldScore = PlayerPrefs.GetFloat($"{saveSlot}_score");
-		float newScore = score + oldScore;
+		int hasBeatGame = PlayerPrefs.GetInt($"{saveSlot}_hasBeatGame");
+        float oldScore = PlayerPrefs.GetFloat($"{saveSlot}_score");
 
-		int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
+        float newScore = score + oldScore;
 
-		if (currentLevel > levelsCompleted)
+        if (  hasBeatGame == 0 && currentLevel != 7 || hasBeatGame == 1)
 		{
-            PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
-        }
 
-		PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
-		 
-		PlayerPrefs.Save();
-		Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
-		SceneManager.LoadScene("LevelSelect");
+            int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
+
+            if (currentLevel > levelsCompleted)
+            {
+                PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+            }
+
+            PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
+
+            PlayerPrefs.Save();
+            Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+            SceneManager.LoadScene("LevelSelect");
+        }
+		else if (hasBeatGame == 0 && currentLevel == 7)
+		{
+            int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
+
+            if (currentLevel > levelsCompleted)
+            {
+                PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+            }
+
+            PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
+			PlayerPrefs.SetInt($"{saveSlot}_hasBeatGame", 1);
+
+            PlayerPrefs.Save();
+            Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+            SceneManager.LoadScene("winCutscene");
+        }
+		
+
 	}
 
 	void UpdateUI()

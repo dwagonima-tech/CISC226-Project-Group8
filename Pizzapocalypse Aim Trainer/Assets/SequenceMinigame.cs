@@ -54,18 +54,18 @@ public class SequenceMinigame : MonoBehaviour
 
 	void SpawnCircle(int index)
 	{
-		Vector2 randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        Vector2 randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
 
-		while (circlePositions.Contains(randomPos))
-		{
-			randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        // Check if any existing circle is within 1 unit of the new position
+        while (circlePositions.Exists(pos => Vector2.Distance(pos, randomPos) < 1f))
+        {
+            randomPos = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+        }
 
-		}
-
-		circlePositions.Add(randomPos);
+        circlePositions.Add(randomPos);
 
 
-		GameObject circle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
+        GameObject circle = Instantiate(circlePrefab, randomPos, Quaternion.identity, transform);
         circle.transform.localScale = new Vector3(CircleSize, CircleSize, CircleSize);
 
 		CircleAnimationEvents animEvents = circle.GetComponent<CircleAnimationEvents>();

@@ -3271,7 +3271,7 @@ MonoBehaviour:
   playerMaxHP: 50
   playerCurrentHP: 0
   playerBaseDamage: 5
-  enemyMaxHP: 100
+  enemyMaxHP: 200
   enemyCurrentHP: 0
   enemyBaseDamage: 5
   playerHealthBar: {fileID: 244012282}
@@ -3594,7 +3594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
   totalCirclesToSpawn: 10
-  timeLimit: 5
+  timeLimit: 30
   CircleSize: 1
   spawnMinX: -12
   spawnMaxX: 12

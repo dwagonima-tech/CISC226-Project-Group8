@@ -98,7 +98,7 @@ public class LevelManager : MonoBehaviour
 
     void activateMap(int levelsCompleted)
     {   
-        if (levelsCompleted > 0)
+        if (levelsCompleted > 0 && levelsCompleted != 7)
         {
             for (int i = 0; i < levelsCompleted+1; i++)
             {
@@ -111,12 +111,19 @@ public class LevelManager : MonoBehaviour
                 levelButtons[i].interactable = false;
             }
         }
-        else
+        else if (levelsCompleted == 0)
         {
             levelButtons[0].interactable = true;
             for (int i = 1; i < 7; i++)
             {
                 levelButtons[i].interactable = false;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                levelButtons[i].interactable = true;
             }
         }
 

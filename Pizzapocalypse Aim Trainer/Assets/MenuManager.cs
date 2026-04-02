@@ -20,9 +20,10 @@ public class MainMenu : MonoBehaviour
 	[Header("Game Select Buttons")]
 	public Button newGameButton;
 	public Button loadGameButton;
-	public Button backToMainButton;
+    public Button backToMainButton1;
+    public Button backToMainButton2;
 
-	[Header("Save Slot Buttons")]
+    [Header("Save Slot Buttons")]
 	public Button[] saveSlotButtons;
 	public TextMeshProUGUI[] saveSlotTexts;
 
@@ -83,8 +84,11 @@ public class MainMenu : MonoBehaviour
         if (loadGameButton == null && gameSelectionPanel != null)
             loadGameButton = gameSelectionPanel.transform.Find("LoadGameButton")?.GetComponent<Button>();
 
-        if (backToMainButton == null && gameSelectionPanel != null)
-            backToMainButton = gameSelectionPanel.transform.Find("BackButton")?.GetComponent<Button>();
+        if (backToMainButton1 == null && gameSelectionPanel != null)
+            backToMainButton1 = gameSelectionPanel.transform.Find("BackButton")?.GetComponent<Button>();
+
+        if (backToMainButton2 == null && gameSelectionPanel != null)
+            backToMainButton2 = gameSelectionPanel.transform.Find("BackButton")?.GetComponent<Button>();
 
         // If save slot buttons not assigned, try to find them
         if (saveSlotButtons == null || saveSlotButtons.Length == 0)
@@ -121,8 +125,11 @@ public class MainMenu : MonoBehaviour
         if (loadGameButton != null)
             loadGameButton.onClick.AddListener(OnLoadGameClicked);
 
-        if (backToMainButton != null)
-            backToMainButton.onClick.AddListener(BackToMainMenu);
+        if (backToMainButton1 != null)
+            backToMainButton1.onClick.AddListener(BackToMainMenu);
+
+        if (backToMainButton2 != null)
+            backToMainButton2.onClick.AddListener(BackToMainMenu);
 
         // Save slot buttons
         if (saveSlotButtons != null)
@@ -203,7 +210,7 @@ public class MainMenu : MonoBehaviour
                     // You can display additional info like playtime, level, etc.
                     int levels = PlayerPrefs.GetInt($"{i}_LevelsCompleted", 0);
                     float score = PlayerPrefs.GetFloat($"{i}_score", 0f);
-                    saveSlotTexts[i].text = $"Slot {i + 1}\nLevels Completed: {levels}";
+                    saveSlotTexts[i].text = $"Slot {i + 1}\nLevels Completed: {levels}\nScore: {score}";
                 }
                 else
                 {
@@ -240,6 +247,7 @@ public class MainMenu : MonoBehaviour
         {
             PlayerPrefs.SetInt($"{slotIndex}_LevelsCompleted", 0);
             PlayerPrefs.SetFloat($"{slotIndex}_score", 0);
+            PlayerPrefs.SetInt($"{slotIndex}_hasBeatGame", 0);
         }
         PlayerPrefs.Save();
 
@@ -271,8 +279,17 @@ public class MainMenu : MonoBehaviour
             yield return new WaitForSeconds(transitionDelay);
         }
 
-        // Load the game scene
-        SceneManager.LoadScene("LevelSelect"); 
+        if (isNewGameMode)
+        {
+            // Do intro cutscene if it is a new game
+            SceneManager.LoadScene("introAnimation");
+        }
+        else
+        {
+            // Load the game scene
+            SceneManager.LoadScene("LevelSelect");
+        }
+        
     }
 
 	// Method for Options button
