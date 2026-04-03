@@ -121,20 +121,20 @@ public class GameManager : MonoBehaviour
 	{
 		if (bot == "Jerry")
 		{
-			playerMaxHP = 150;
-			playerBaseDamage = 25;
+			playerMaxHP = 170;
+			playerBaseDamage = 42;
 			damageReduction = 0.5f;
 		}
 		else if (bot == "Paul")
 		{
 			playerMaxHP = 100;
-			playerBaseDamage = 45;
+			playerBaseDamage = 64;
 			damageReduction = 0.75f;
 		}
 		else if (bot == "Harold")
 		{
-			playerMaxHP = 200;
-			playerBaseDamage = 15;
+			playerMaxHP = 220;
+			playerBaseDamage = 39;
 			damageReduction = 0.25f;
 		}
 	}

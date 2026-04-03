@@ -968,7 +968,7 @@ MonoBehaviour:
   - {fileID: 2122773623}
   - {fileID: 364006923}
   initialDelay: 1
-  textDisplayDuration: 4
+  textDisplayDuration: 2.5
   fadeDuration: 0.5
   nextSceneName: LevelSelect
 --- !u!4 &1096776902

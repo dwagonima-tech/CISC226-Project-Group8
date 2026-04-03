@@ -9,6 +9,10 @@ public class TrackingMinigame : MonoBehaviour
 	public GameObject endCirclePrefab;
 	public GameObject trackingCirclePrefab;
 
+	[Header("Circle Scale Settings")]
+	public Vector3 startCircleScale = new Vector3(1f, 1f, 1f);
+    public Vector3 endCircleScale = new Vector3(1f, 1f, 1f);
+
 
     [Header("Path Settings")]
 	public float pathLength = 12f;
@@ -17,6 +21,7 @@ public class TrackingMinigame : MonoBehaviour
 	public bool showPath = true; // TOGGLE THIS to show/hide the path line
 	public Color pathColor = Color.gray; // Color of the path line
 	public float pathLineWidth = 0.1f; // Width of the path line
+	public float minDistanceBetweenCircles = 4f;
 
 	[Header("Tracking Settings")]
 	public float trackingSpeed = 2f;
@@ -45,12 +50,17 @@ public class TrackingMinigame : MonoBehaviour
 	private bool mouseOnStart = false;
 	private Mouse mouse; // Reference to mouse input
 
-	void Start()
+    private Vector3 _cachedStartScale;
+    private Vector3 _cachedEndScale;
+
+    void Start()
 	{
 		gameManager = FindFirstObjectByType<GameManager>();
 		mainCamera = Camera.main;
 		mouse = Mouse.current; // Get mouse reference
-	}
+        _cachedStartScale = startCircleScale;
+        _cachedEndScale = endCircleScale;
+    }
 
 	public void StartMinigame()
 	{
@@ -123,7 +133,19 @@ public class TrackingMinigame : MonoBehaviour
 	{
 		if (!isActive) return;
 
-		if (!isTracking && !mouseOnStart)
+        if (startCircle != null && startCircleScale != _cachedStartScale)
+        {
+            startCircle.transform.localScale = startCircleScale;
+            _cachedStartScale = startCircleScale;
+        }
+
+        if (endCircle != null && endCircleScale != _cachedEndScale)
+        {
+            endCircle.transform.localScale = endCircleScale;
+            _cachedEndScale = endCircleScale;
+        }
+
+        if (!isTracking && !mouseOnStart)
 		{
 			CheckMouseOnStart();
 		}
@@ -155,25 +177,52 @@ public class TrackingMinigame : MonoBehaviour
 		if (endCircle != null) Destroy(endCircle);
 		if (trackingCircle != null) Destroy(trackingCircle);
 
-		Vector2 startPoint = new Vector2(
-			Random.Range(minX + 2f, maxX - 2f),
-			Random.Range(minY + 2f, maxY - 2f)
-		);
+		Vector2 startPoint;
+		Vector2 endPoint;
+		int maxAttempts = 100;
+		int attempts = 0;
+		bool validDistanceFound = false;
 
-		Vector2 endPoint = new Vector2(
-			Random.Range(minX + 2f, maxX - 2f),
-			Random.Range(minY + 2f, maxY - 2f)
-		);
+        do
+        {
+            startPoint = new Vector2(
+                Random.Range(minX + 2f, maxX - 2f),
+                Random.Range(minY + 2f, maxY - 2f)
+            );
 
-		pathPoints = GeneratePathPoints(startPoint, endPoint);
+            endPoint = new Vector2(
+                Random.Range(minX + 2f, maxX - 2f),
+                Random.Range(minY + 2f, maxY - 2f)
+            );
 
-		startCircle = Instantiate(startCirclePrefab, startPoint, Quaternion.identity, transform);
-		startCircle.transform.localScale = new Vector3(circleScale, circleScale, circleScale);
+            float distance = Vector2.Distance(startPoint, endPoint);
 
-		endCircle = Instantiate(endCirclePrefab, endPoint, Quaternion.identity, transform);
-		endCircle.transform.localScale = new Vector3(circleScale, circleScale, circleScale);
+            if (distance >= minDistanceBetweenCircles)
+            {
+                validDistanceFound = true;
+            }
 
-		if (startCircle.GetComponent<Collider2D>() == null)
+            attempts++;
+
+            if (attempts >= maxAttempts)
+            {
+                Debug.LogWarning($"Could not find valid positions with distance >= {minDistanceBetweenCircles} after {maxAttempts} attempts. Using last generated positions.");
+                validDistanceFound = true; // Force exit the loop
+            }
+
+        } while (!validDistanceFound);
+
+        Debug.Log($"Start and end circles placed with distance: {Vector2.Distance(startPoint, endPoint):F2} units");
+
+        pathPoints = GeneratePathPoints(startPoint, endPoint);
+
+        startCircle = Instantiate(startCirclePrefab, startPoint, Quaternion.identity, transform);
+        startCircle.transform.localScale = startCircleScale;  // Uses new variable
+
+        endCircle = Instantiate(endCirclePrefab, endPoint, Quaternion.identity, transform);
+        endCircle.transform.localScale = endCircleScale;  // Uses new variable
+
+        if (startCircle.GetComponent<Collider2D>() == null)
 			startCircle.AddComponent<CircleCollider2D>();
 
 		// Create the path line if showPath is enabled
@@ -240,7 +289,38 @@ public class TrackingMinigame : MonoBehaviour
 		}
 	}
 
-	List<Vector2> GeneratePathPoints(Vector2 start, Vector2 end)
+    // Apply scales to existing circles
+    private void ApplyStartCircleScale()
+    {
+        if (startCircle != null)
+            startCircle.transform.localScale = startCircleScale;
+    }
+
+    private void ApplyEndCircleScale()
+    {
+        if (endCircle != null)
+            endCircle.transform.localScale = endCircleScale;
+    }
+
+    // Public methods to change scales at runtime
+    public void UpdateStartCircleScale(Vector3 newScale)
+    {
+        startCircleScale = newScale;
+        ApplyStartCircleScale();
+    }
+
+    public void UpdateEndCircleScale(Vector3 newScale)
+    {
+        endCircleScale = newScale;
+        ApplyEndCircleScale();
+    }
+
+    public void SetMinimumDistance(float distance)
+    {
+        minDistanceBetweenCircles = Mathf.Max(0.1f, distance);
+    }
+
+    List<Vector2> GeneratePathPoints(Vector2 start, Vector2 end)
 	{
 		List<Vector2> points = new List<Vector2>();
 		List<Vector2> controlPoints = new List<Vector2> { start };

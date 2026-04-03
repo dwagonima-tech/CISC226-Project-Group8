@@ -2158,14 +2158,17 @@ MonoBehaviour:
   startCirclePrefab: {fileID: 862544741235840085, guid: 7710cf48f29f1b64ca21d40c61f6cdd8, type: 3}
   endCirclePrefab: {fileID: 7504855207052046987, guid: 687cdde849eddbc418f60cfa543d4211, type: 3}
   trackingCirclePrefab: {fileID: 2757072029295756281, guid: 6b9965bd34d4c7d46951edf82a152b02, type: 3}
+  startCircleScale: {x: 0.66, y: 0.66, z: 0.66}
+  endCircleScale: {x: 0.66, y: 0.66, z: 0.66}
   pathLength: 15
   curveHeight: 4
   curveSegments: 4
   showPath: 1
   pathColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   pathLineWidth: 1
+  minDistanceBetweenCircles: 6
   trackingSpeed: 3
-  circleScale: 1
+  circleScale: 0.66
   successRadius: 2
   startLeewayTime: 5
   minX: -14
@@ -2514,7 +2517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
   numberOfCircles: 7
-  CircleSize: 1
+  CircleSize: 0.66
   delayBetweenRounds: 0.35
   timeLimit: 15
   minX: -12
@@ -3135,7 +3138,7 @@ MonoBehaviour:
   circlePrefab: {fileID: 3337059831009671125, guid: 481e912860a6d1146bb51c855b11af4b, type: 3}
   totalCirclesToSpawn: 10
   timeLimit: 20
-  CircleSize: 1
+  CircleSize: 0.66
   spawnMinX: -12
   spawnMaxX: 12
   spawnMinY: -6
