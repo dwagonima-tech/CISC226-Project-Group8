@@ -12,6 +12,8 @@ public class LevelManager : MonoBehaviour
 
     public Button[] levelButtons;
 
+    public Button mainMenuButton;
+
     private TaskCompletionSource<bool> robotSelectionTcs;
     private int pendingLevel;
     
@@ -64,8 +66,15 @@ public class LevelManager : MonoBehaviour
 
 		if (robotButtons[2] != null)
 			robotButtons[2].onClick.AddListener(() => OnRobotSelected("Harold"));
+
+        if (mainMenuButton != null)
+            mainMenuButton.onClick.AddListener(() => BackToMainMenu());
 	}
 
+    void BackToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
 
     public async void onLevelClicked(int level)
     {

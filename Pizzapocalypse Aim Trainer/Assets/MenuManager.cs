@@ -16,12 +16,14 @@ public class MainMenu : MonoBehaviour
 	public Button playButton;
 	public Button optionsButton;
 	public Button quitButton;
+    public Button muteButton;
 
-	[Header("Game Select Buttons")]
+    [Header("Game Select Buttons")]
 	public Button newGameButton;
 	public Button loadGameButton;
     public Button backToMainButton1;
     public Button backToMainButton2;
+    
 
     [Header("Save Slot Buttons")]
 	public Button[] saveSlotButtons;
@@ -77,6 +79,9 @@ public class MainMenu : MonoBehaviour
         if (quitButton == null && mainMenuPanel != null)
             quitButton = mainMenuPanel.transform.Find("QuitButton")?.GetComponent<Button>();
 
+        if (muteButton == null && mainMenuPanel != null)
+            muteButton = mainMenuPanel.transform.Find("MuteButton")?.GetComponent<Button>();
+
         // Find game selection buttons
         if (newGameButton == null && gameSelectionPanel != null)
             newGameButton = gameSelectionPanel.transform.Find("NewGameButton")?.GetComponent<Button>();
@@ -89,6 +94,8 @@ public class MainMenu : MonoBehaviour
 
         if (backToMainButton2 == null && gameSelectionPanel != null)
             backToMainButton2 = gameSelectionPanel.transform.Find("BackButton")?.GetComponent<Button>();
+
+        
 
         // If save slot buttons not assigned, try to find them
         if (saveSlotButtons == null || saveSlotButtons.Length == 0)
@@ -118,6 +125,9 @@ public class MainMenu : MonoBehaviour
         if (quitButton != null)
             quitButton.onClick.AddListener(QuitGame);
 
+        if (muteButton != null)
+            muteButton.onClick.AddListener(muteAudio);
+
         // Game selection buttons
         if (newGameButton != null)
             newGameButton.onClick.AddListener(OnNewGameClicked);
@@ -145,7 +155,10 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-
+    void muteAudio()
+    {
+        AudioListener.pause = !AudioListener.pause;
+    }
 
     // Called when Play button is clicked
     void OnPlayClicked()

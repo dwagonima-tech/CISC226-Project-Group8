@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
 	[Header("Battle Modifiers")]
 	private int defenseTurnsRemaining = 0;
 	private float damageReduction = 0.5f;
+	private bool win = false;
 
 	private GameObject robotUsed;
 	private Animator RobotAnimator;
@@ -332,6 +333,7 @@ public class GameManager : MonoBehaviour
 
 	void Victory()
 	{
+		win = true;
 		messageText.text = "VICTORY! You defeated the enemy!";
 		battleButton.SetActive(false);
 		defendButton.SetActive(false);
@@ -340,6 +342,7 @@ public class GameManager : MonoBehaviour
 
 	void GameOver()
 	{
+		win = false;
 		messageText.text = "GAME OVER! You were defeated...";
         battleButton.SetActive(false);
 		defendButton.SetActive(false);
@@ -348,43 +351,54 @@ public class GameManager : MonoBehaviour
 
 	void ResetGame()
 	{
-		int hasBeatGame = PlayerPrefs.GetInt($"{saveSlot}_hasBeatGame");
+        int hasBeatGame = PlayerPrefs.GetInt($"{saveSlot}_hasBeatGame");
         float oldScore = PlayerPrefs.GetFloat($"{saveSlot}_score");
 
         float newScore = score + oldScore;
 
-        if (  hasBeatGame == 0 && currentLevel != 7 || hasBeatGame == 1)
+        if (win)
 		{
 
-            int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
-
-            if (currentLevel > levelsCompleted)
+            if (hasBeatGame == 0 && currentLevel != 7 || hasBeatGame == 1)
             {
-                PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+
+                int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
+
+                if (currentLevel > levelsCompleted)
+                {
+                    PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+                }
+
+                PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
+
+                PlayerPrefs.Save();
+                Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+                SceneManager.LoadScene("LevelSelect");
             }
+            else if (hasBeatGame == 0 && currentLevel == 7)
+            {
+                int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
 
+                if (currentLevel > levelsCompleted)
+                {
+                    PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
+                }
+
+                PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
+                PlayerPrefs.SetInt($"{saveSlot}_hasBeatGame", 1);
+
+                PlayerPrefs.Save();
+                Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+                SceneManager.LoadScene("winCutscene");
+            }
+        }
+		else
+		{
             PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
-
-            PlayerPrefs.Save();
-            Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
+			PlayerPrefs.Save();
             SceneManager.LoadScene("LevelSelect");
         }
-		else if (hasBeatGame == 0 && currentLevel == 7)
-		{
-            int levelsCompleted = PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted");
-
-            if (currentLevel > levelsCompleted)
-            {
-                PlayerPrefs.SetInt($"{saveSlot}_LevelsCompleted", currentLevel);
-            }
-
-            PlayerPrefs.SetFloat($"{saveSlot}_score", newScore);
-			PlayerPrefs.SetInt($"{saveSlot}_hasBeatGame", 1);
-
-            PlayerPrefs.Save();
-            Debug.Log("We have completed " + PlayerPrefs.GetInt($"{saveSlot}_LevelsCompleted"));
-            SceneManager.LoadScene("winCutscene");
-        }
+		
 		
 
 	}
